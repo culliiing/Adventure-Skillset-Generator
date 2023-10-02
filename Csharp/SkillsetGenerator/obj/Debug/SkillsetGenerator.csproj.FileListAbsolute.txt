@@ -1,0 +1,8 @@
+C:\Users\chris\source\repos\Adventure-Skillset-Generator\SkillsetGenerator\SkillsetGenerator\bin\Debug\SkillsetGenerator.exe.config
+C:\Users\chris\source\repos\Adventure-Skillset-Generator\SkillsetGenerator\SkillsetGenerator\bin\Debug\SkillsetGenerator.exe
+C:\Users\chris\source\repos\Adventure-Skillset-Generator\SkillsetGenerator\SkillsetGenerator\bin\Debug\SkillsetGenerator.pdb
+C:\Users\chris\source\repos\Adventure-Skillset-Generator\SkillsetGenerator\SkillsetGenerator\obj\Debug\SkillsetGenerator.csproj.AssemblyReference.cache
+C:\Users\chris\source\repos\Adventure-Skillset-Generator\SkillsetGenerator\SkillsetGenerator\obj\Debug\SkillsetGenerator.csproj.SuggestedBindingRedirects.cache
+C:\Users\chris\source\repos\Adventure-Skillset-Generator\SkillsetGenerator\SkillsetGenerator\obj\Debug\SkillsetGenerator.csproj.CoreCompileInputs.cache
+C:\Users\chris\source\repos\Adventure-Skillset-Generator\SkillsetGenerator\SkillsetGenerator\obj\Debug\SkillsetGenerator.exe
+C:\Users\chris\source\repos\Adventure-Skillset-Generator\SkillsetGenerator\SkillsetGenerator\obj\Debug\SkillsetGenerator.pdb
