@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,17 +14,15 @@ namespace SkillsetGenerator
 
         static void Main(string[] args)
         {
-            Grid grid = GetNewGrid();
-            grid.PrintEmpty();
+            GetNewGrid().PrintEmpty();
 
             Console.ReadKey();
         }
 
-        public static Grid GetNewGrid()
+        public static Grid GetNewGrid(int width = -1, int height = -1)
         {
-
-            int height = 5;
-            int width = 4;
+            if (width < 1) width = random.Next(1, 10);
+            if (height < 1) height = random.Next(1, 10);
 
             return new Grid(width, height);
         }
