@@ -63,15 +63,22 @@ namespace SkillsetGenerator
 
         public void Place(Shape shape, int x, int y)
         {
-            if (CellWithCoordinates(x, y).IsUnoccupied())
+            List<Cell> cells = new List<Cell>();
+
+            try
             {
-                foreach (Cell cell in shape.GetCells())
+                if (CellWithCoordinates(x, y).IsUnoccupied())
                 {
-                    CellWithCoordinates(x + cell.GetCoordinate().X, y + cell.GetCoordinate().Y).SetSymbol(shape.ToString()[0]);
+                    foreach (Cell cell in shape.GetCells())
+                    {
+                        CellWithCoordinates(x + cell.GetCoordinate().X, y + cell.GetCoordinate().Y).SetSymbol(shape.ToString()[0]);
+                    }
                 }
             }
-            else
-                Debug.WriteLine($"Couldn't place shape {shape.ToString()} at ({x},{y}).");
+            catch(Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+            }
         }
 
         public Cell CellWithCoordinates(int x, int y)
@@ -80,7 +87,7 @@ namespace SkillsetGenerator
                 if (cell.Overlaps(x, y))
                     return cell;
 
-            return null;
+            throw new Exception("No cell found with given coordinates.");
         }
     }
 }
