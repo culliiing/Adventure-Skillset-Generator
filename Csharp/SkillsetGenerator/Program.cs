@@ -15,7 +15,7 @@ namespace SkillsetGenerator
         static void Main(string[] args)
         {
             grid = new Grid();
-            grid.PrintEmpty();
+            grid.Print();
 
             Console.ReadKey();
         }

@@ -20,7 +20,7 @@ namespace SkillsetGenerator
         {
             this.name = name.ToUpper();
             this.symbol = this.name[0];
-            this.cells = new List<Cell>() { new Cell(0,0) };
+            this.cells = new List<Cell>() { new Cell(0,0,symbol) };
             this.Build(instructions);
         }
 
@@ -63,7 +63,7 @@ namespace SkillsetGenerator
                 }
 
                 if(!Contains(x,y))
-                    cells.Add(new Cell(x,y));
+                    cells.Add(new Cell(x,y,symbol));
             }
         }
 
@@ -82,13 +82,28 @@ namespace SkillsetGenerator
         /// <summary>
         /// Prints the coordinates of each Cell in the shape, relative to the shape.
         /// </summary>
-        public void Print()
+        public void Print(bool graphic = true)
         {
-            Console.WriteLine(this.name);
+            Console.Write($"{this.name}:");
             foreach (Cell cell in cells)
             {
-                cell.Print();
+                cell.Print(graphic);
             }
+            Console.WriteLine();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>Name of the Shape.</returns>
+        public override string ToString()
+        {
+            return name;
+        }
+
+        public List<Cell> GetCells()
+        {
+            return cells;
         }
     }
 }
