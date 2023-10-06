@@ -15,8 +15,18 @@ namespace SkillsetGenerator
         string empty = "_";
         string dead = "X";
 
-        public Grid(int width, int height)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="width">Leave empty for random value.</param>
+        /// <param name="height">Leave empty for random value.</param>
+        public Grid(int width = 0, int height = 0)
         {
+            if (width < 1)
+                width = random.Next(1,10);
+            if (height < 1)
+                height = random.Next(1,10);
+
             this.grid = new int[width, height];
         }
 

@@ -10,21 +10,14 @@ namespace SkillsetGenerator
     internal class Program
     {
         static Random random = new Random();
-        Grid grid;
+        static Grid grid;
 
         static void Main(string[] args)
         {
-            GetNewGrid().PrintEmpty();
+            grid = new Grid();
+            grid.PrintEmpty();
 
             Console.ReadKey();
-        }
-
-        public static Grid GetNewGrid(int width = -1, int height = -1)
-        {
-            if (width < 1) width = random.Next(1, 10);
-            if (height < 1) height = random.Next(1, 10);
-
-            return new Grid(width, height);
         }
     }
 }
