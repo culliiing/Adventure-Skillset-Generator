@@ -8,7 +8,8 @@ system('cls')
 print('Output:\n')
 
 # Create grid with random dim
-GRID_X, GRID_Y = rand.randint(3, 5), rand.randint(3, 5)
+#4x3 grid with A, B and C has only one solution, but 4x3 has two. 
+GRID_X, GRID_Y = rand.randint(3, 3), rand.randint(4, 4)
 grid = Grid(GRID_X, GRID_Y)
 
 # Create two shapes A and B
