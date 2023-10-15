@@ -5,7 +5,6 @@ bin/
 Csharp/.vs/
 Csharp/Skillsetgenerator/bin/
 Csharp/Skillsetgenerator/obj/
-Csharp/Skillsetgenerator/*.csproj
 
 # Created by https://www.toptal.com/developers/gitignore/api/visualstudio,openframeworks+visualstudio,visualstudiocode,dotnetcore,csharp,python
 # Edit at https://www.toptal.com/developers/gitignore?templates=visualstudio,openframeworks+visualstudio,visualstudiocode,dotnetcore,csharp,python
