@@ -9,78 +9,55 @@ namespace SkillsetGenerator
 {
     internal class Cell
     {
-        int x;
-        int y;
+        Point coordinate;
+        public int X { get { return coordinate.X; } }
+        public int Y { get { return coordinate.Y; } }
+
         bool enabled;
         char symbol;
+        Shape shape;
 
         // Symbolizes cells that are not occupied
-        const char alive = 'O';
+        const char alive = '|';
         // Symbolizes cells that cannot be occupied
         const char dead = 'X';
 
-        Point coordinate;
-
         public Cell(int x, int y, bool enabled = true)
         {
-            this.x = x;
-            this.y = y;
             this.coordinate = new Point(x, y);
             this.enabled = enabled;
             this.symbol = enabled ? alive : dead;
         }
 
-        public Cell(int x, int y, char symbol) : this(x,y)
+        public Cell(int x, int y, Shape shape) : this(x,y)
         {
-            this.symbol = symbol;
-        }
-
-        public Cell(Point coordinate, bool enabled = true)
-        {
-            this.x = coordinate.X;
-            this.y = coordinate.Y;
-            this.coordinate = coordinate;
-            this.enabled = enabled;
-            this.symbol = enabled ? alive : dead;
-        }
-
-        public Cell(Point coordinate, char symbol) : this(coordinate)
-        {
-            this.symbol = symbol;
+            this.shape = shape;
+            this.symbol = shape.Symbol;
         }
 
         public void Print(bool graphic = true)
         {
             string output = graphic ? symbol.ToString() : $"({coordinate.X},{coordinate.Y})";
             Console.Write(output);
-
-            //if (graphic)
-            //    Console.Write(symbol);
-            //else
-            //    Console.Write($"({coordinate.X},{coordinate.Y})");
         }
 
-        public bool Overlaps(int x, int y)
+        public bool HasCoordinates(int x, int y)
         {
-            if (this.x == x && this.y == y)
+            if (coordinate.X == x && coordinate.Y == y)
                 return true;
+
             return false;
         }
 
-        public bool IsUnoccupied()
+        public bool IsAvailable()
         {
-            if(symbol == alive && enabled) return true;
-            return false;
-        }
+            if (!enabled)
+                return false;
 
-        public Point GetCoordinate()
-        {
-            return coordinate;
-        }
+            if (shape != null)
+                return false;
 
-        public void SetSymbol(char symbol)
-        {
-            this.symbol = symbol;
+            return true;
         }
     }
 }

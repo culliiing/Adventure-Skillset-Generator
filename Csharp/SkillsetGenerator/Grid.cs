@@ -12,7 +12,7 @@ namespace SkillsetGenerator
     {
         Random random = new Random();
 
-        List<Cell> cells;
+        Cell[,] cells;
         int width;
         int height;
 
@@ -23,13 +23,12 @@ namespace SkillsetGenerator
         /// <param name="height">Leave empty for random value.</param>
         public Grid(int height = 0, int width = 0)
         {
-            cells = new List<Cell>();
-
             if (width < 1) 
                 width = random.Next(1,10);
             if (height < 1) 
                 height = random.Next(1,10);
-            
+
+            this.cells = new Cell[height, width];
             this.width = width;
             this.height = height;
 
@@ -37,14 +36,11 @@ namespace SkillsetGenerator
             {
                 for (int j = 0; j < this.width; j++)
                 {
-                    cells.Add(new Cell(i, j));
+                    cells[i, j] = new Cell(i, j);
                 }
-            }
+            }            
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="graphic">Set to false if you want to see coordinates for each cell in the grid instead of a graphical representation.</param>
         public void Print(bool graphic = true)
         {
@@ -54,40 +50,48 @@ namespace SkillsetGenerator
             {
                 for (int j = 0; j < width; j++)
                 {
-                    CellWithCoordinates(i, j).Print(graphic);
+                    cells[i, j].Print(graphic);
                 }
-
-                Console.Write("\n");
+                
+                Console.WriteLine(); // first row done, line-break
             }
         }
 
-        public void Place(Shape shape, int x, int y)
+        /// <param name="force">Replaces existing shapes and overrides disabled grid cells. May cause out-of-bounds errors if true.</param>
+        public void PlaceShape(Shape shape, int x, int y, bool force = false)
         {
-            List<Cell> cells = new List<Cell>();
-
-            try
+            if (ShapeFits(shape, x, y) || force)
             {
-                if (CellWithCoordinates(x, y).IsUnoccupied())
+                foreach (Cell cell in shape.GetCells())
                 {
-                    foreach (Cell cell in shape.GetCells())
-                    {
-                        CellWithCoordinates(x + cell.GetCoordinate().X, y + cell.GetCoordinate().Y).SetSymbol(shape.ToString()[0]);
-                    }
+                    cells[x + cell.X, y + cell.Y] = cell;
                 }
+
+                if(Program.debug)
+                    Console.WriteLine($"Shape {shape.ToString()} placed at ({x},{y}).");
             }
-            catch(Exception exception)
-            {
-                Debug.WriteLine(exception.Message);
-            }
+            else if(Program.debug)
+                Console.WriteLine($"Could not place shape {shape.ToString()} at ({x},{y}).");
         }
 
-        public Cell CellWithCoordinates(int x, int y)
+        public bool ShapeFits(Shape shape, int x, int y)
         {
-            foreach (Cell cell in cells)
-                if (cell.Overlaps(x, y))
-                    return cell;
+            foreach (Cell cell in shape.GetCells())
+            {
+                int absoluteX = x + cell.X;
+                int absoluteY = y + cell.Y;
 
-            throw new Exception("No cell found with given coordinates.");
+                if (absoluteX > height-1 || absoluteX < 0)
+                    return false;
+
+                if (absoluteY > width-1 || absoluteY < 0)
+                    return false;
+
+                if (!cells[absoluteX,absoluteY].IsAvailable())
+                    return false;
+            }
+
+            return true;
         }
     }
 }
