@@ -93,6 +93,34 @@ namespace SkillsetGenerator
 
         public bool IsIdenticalToShape(Shape other)
         {
+            for (int i = 0; i < 12; i++)
+            {
+                if (HasIdenticalCells(other))
+                    return true;
+
+                if (i == 3)
+                    ReflectVertical();
+
+                if (i == 7)
+                    ReflectHorizontal();
+
+                Rotate90();
+            }
+
+            return false;
+        }
+
+        public bool HasIdenticalCells(Shape other)
+        {
+            if (cells.Count() != other.cells.Count())
+                return false;
+
+            foreach (Cell cell in cells)
+            {
+                if (!other.ContainsCell(cell.X, cell.Y))
+                    return false;
+            }
+
             return true;
         }
 
