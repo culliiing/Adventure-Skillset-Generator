@@ -91,15 +91,72 @@ namespace SkillsetGenerator
             return false;
         }
 
+        public bool IsIdenticalToShape(Shape other)
+        {
+            return true;
+        }
+
+        public void Rotate90()
+        {
+            foreach (Cell cell in cells)
+            {
+                int oldX = cell.X;
+                cell.X = cell.Y;
+                cell.Y = -oldX;
+            }
+        }
+
+        public void ReflectVertical()
+        {
+            foreach (Cell cell in cells)
+            {
+                cell.X = -cell.X;
+            }
+        }
+
+        public void ReflectHorizontal()
+        {
+            foreach (Cell cell in cells)
+            {
+                cell.Y = -cell.Y;
+            }
+        }
+
         /// <summary>
         /// Prints the coordinates of each Cell in the shape, relative to the shape.
         /// </summary>
         public void Print(bool graphic = false)
         {
             Console.Write($"{this.name}: ");
-            foreach (Cell cell in cells)
+
+            if (!graphic)
             {
-                cell.Print(graphic);
+                foreach (Cell cell in cells)
+                {
+                    cell.Print(graphic);
+                }
+            }
+            else
+            {
+                // Find the dimensions of the grid
+                int maxX = cells.Max(cell => cell.X);
+                int minX = cells.Min(cell => cell.X);
+                int maxY = cells.Max(cell => cell.Y);
+                int minY = cells.Min(cell => cell.Y);
+
+                int height = maxX - minX;
+                int width = maxY - minY;
+
+                // Get the greatest length of the shape
+                int maxLength = height > width ? height + 1 : width + 1;
+
+                // Create a grid and place the shape in the center of it
+                Grid grid = new Grid(maxLength*2-1, maxLength*2-1);
+                grid.PlaceShape(this, maxLength-1, maxLength-1);
+
+                // Print the grid
+                Console.Write($"\n");
+                grid.Print();
             }
 
             Console.WriteLine();

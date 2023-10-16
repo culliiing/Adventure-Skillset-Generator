@@ -10,8 +10,8 @@ namespace SkillsetGenerator
     internal class Cell
     {
         Point coordinate;
-        public int X { get { return coordinate.X; } }
-        public int Y { get { return coordinate.Y; } }
+        public int X { get { return coordinate.X; } set { coordinate.X = value; } }
+        public int Y { get { return coordinate.Y; } set { coordinate.Y = value; } }
 
         bool enabled;
         char symbol;
