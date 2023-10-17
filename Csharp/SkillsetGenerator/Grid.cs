@@ -15,6 +15,7 @@ namespace SkillsetGenerator
         Cell[,] cells;
         int width;
         int height;
+        List<Shape> shapes;
 
         /// <summary>
         /// A matrix of Cells.
@@ -31,6 +32,7 @@ namespace SkillsetGenerator
             this.cells = new Cell[height, width];
             this.width = width;
             this.height = height;
+            this.shapes = new List<Shape>();
 
             for (int i = 0; i < this.height; i++)
             {
@@ -67,31 +69,64 @@ namespace SkillsetGenerator
                     cells[x + cell.X, y + cell.Y] = cell;
                 }
 
-                if(Program.debug)
+                shapes.Add(shape);
+
+                if (Program.debug)
                     Console.WriteLine($"Shape {shape.ToString()} placed at ({x},{y}).");
             }
-            else if(Program.debug)
-                Console.WriteLine($"Could not place shape {shape.ToString()} at ({x},{y}).");
+            else if (Program.debug) ;
+                //Console.WriteLine($"Could not place shape {shape.ToString()} at ({x},{y}).");
         }
 
         public bool ShapeFits(Shape shape, int x, int y)
         {
+            // Check if shape is identical to any other shape
+            foreach(Shape other in shapes)
+            {
+                if (shape.IsIdenticalToShape(other))
+                {
+                    if (Program.debug) 
+                        Console.WriteLine($"{shape.ToString()} is identical to {other.ToString()}.");
+
+                    return false;
+                }
+            }
+
+            // Check if shape is out of bounds or on top of another shape
             foreach (Cell cell in shape.GetCells())
             {
                 int absoluteX = x + cell.X;
                 int absoluteY = y + cell.Y;
 
-                if (absoluteX > height-1 || absoluteX < 0)
-                    return false;
+                if (IsOutOfBounds(absoluteX,absoluteY))
+                {
+                    if (Program.debug)
+                    {
+                        Console.WriteLine($"Could not place {shape.ToString()} out of bounds at ({x},{y}).");
+                    }
 
-                if (absoluteY > width-1 || absoluteY < 0)
                     return false;
+                }
 
-                if (!cells[absoluteX,absoluteY].IsAvailable())
+                if (!cells[absoluteX, absoluteY].IsAvailable())
+                {
+                    if (Program.debug)
+                        Console.WriteLine($"Could not place {shape.ToString()} on disabled or occupied cell ({x},{y}).");
+
                     return false;
+                }
             }
 
             return true;
+        }
+
+        // Check if coordinates is out of bounds of the grid
+        public bool IsOutOfBounds(int x, int y)
+        {
+            if (x > height || x < 0 || y > width || y < 0)
+                return true;
+
+            return false;
         }
     }
 }
