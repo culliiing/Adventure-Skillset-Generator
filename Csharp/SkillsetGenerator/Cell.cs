@@ -59,5 +59,11 @@ namespace SkillsetGenerator
 
             return true;
         }
+
+        // A method for cloning a Cell
+        public Cell Clone()
+        {
+            return new Cell(this.X, this.Y, this.enabled);
+        }
     }
 }

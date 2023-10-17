@@ -91,26 +91,35 @@ namespace SkillsetGenerator
             return false;
         }
 
+        /// <summary>
+        /// Determines whether two shapes are the same shape, regardless of orientation.
+        /// </summary>
         public bool IsIdenticalToShape(Shape other)
         {
+            Shape shape = (Shape)this.Clone();
+
             for (int i = 0; i < 12; i++)
             {
-                if (HasIdenticalCells(other))
+                if (shape.IsStrictlyIdenticalToShape(other))
                     return true;
 
                 if (i == 3)
-                    ReflectVertical();
+                    shape.ReflectVertical();
 
                 if (i == 7)
-                    ReflectHorizontal();
+                    shape.ReflectHorizontal();
 
-                Rotate90();
+                shape.Rotate90();
             }
 
             return false;
         }
 
-        public bool HasIdenticalCells(Shape other)
+        /// <summary>
+        /// Determines whether two shapes are strictly identical, meaning they are the same shape and orientation.
+        /// </summary>
+        /// <param name="other"></param>
+        public bool IsStrictlyIdenticalToShape(Shape other)
         {
             if (cells.Count() != other.cells.Count())
                 return false;
@@ -199,6 +208,19 @@ namespace SkillsetGenerator
         public List<Cell> GetCells()
         {
             return cells;
+        }
+
+        // Clone a Shape
+        public object Clone()
+        {
+            List<Cell> newCells = new List<Cell>();
+
+            foreach (Cell cell in cells)
+            {
+                newCells.Add((Cell)cell.Clone());
+            }
+
+            return new Shape(name, newCells);
         }
     }
 }
