@@ -15,18 +15,15 @@ namespace SkillsetGenerator
 
         static void Main(string[] args)
         {
-            grid = new Grid();
+            grid = new Grid(10,10);
             grid.Print();
             Shape A = new Shape("Abraham", "d");
             Shape B = new Shape("Beatrice", "ds");
-            Shape C = new Shape("Catherine", "dsaw");
+            Shape C = new Shape("Catherine", "dsa");
             Shape D = new Shape("Diane", "s");
-            grid.PlaceShape(A, 2, 0);
-            grid.Print();
-            grid.PlaceShape(D, 0, 1);
-            grid.Print();
-            grid.PlaceShape(C, 0, 0);
-            grid.Print();
+
+            B.Print(true);
+            B.Rotate90().ReflectVertical().Rotate90().Print(true);
 
             Console.ReadKey();
         }

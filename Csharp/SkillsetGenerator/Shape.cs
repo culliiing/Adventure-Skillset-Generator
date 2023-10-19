@@ -133,7 +133,7 @@ namespace SkillsetGenerator
             return true;
         }
 
-        public void Rotate90()
+        public Shape Rotate90()
         {
             foreach (Cell cell in cells)
             {
@@ -141,22 +141,28 @@ namespace SkillsetGenerator
                 cell.X = cell.Y;
                 cell.Y = -oldX;
             }
+
+            return this;
         }
 
-        public void ReflectVertical()
+        public Shape ReflectVertical()
         {
             foreach (Cell cell in cells)
             {
                 cell.X = -cell.X;
             }
+
+            return this;
         }
 
-        public void ReflectHorizontal()
+        public Shape ReflectHorizontal()
         {
             foreach (Cell cell in cells)
             {
                 cell.Y = -cell.Y;
             }
+
+            return this;
         }
 
         /// <summary>
