@@ -16,11 +16,12 @@ namespace SkillsetGenerator
         /// <summary>
         /// Build your own Shape with manual instructions.
         /// </summary>
-        /// <param name="instructions">Input string of directions where 8=up, 6=right, 2=down, 4=left.</param>
+        /// <param name="instructions">Input string of directions where 8=up, 6=right, 2=down, 4=left. WASD also work. Leave empty for random shape.</param>
         public Shape(string name, string instructions)
         {
             this.name = name.ToUpper();
             this.symbol = this.name[0];
+
             this.cells = new List<Cell>() { new Cell(0,0,this) };
             this.Build(instructions);
 
@@ -96,20 +97,27 @@ namespace SkillsetGenerator
         /// </summary>
         public bool IsIdenticalToShape(Shape other)
         {
-            Shape shape = (Shape)this.Clone();
+            Shape shape = this.Clone();
 
-            for (int i = 0; i < 12; i++)
+            foreach (Cell cell in cells)
             {
-                if (shape.IsStrictlyIdenticalToShape(other))
-                    return true;
+                ShiftOriginToCell(cell);
 
-                if (i == 3)
-                    shape.ReflectVertical();
+                for (int i = 0; i < 12; i++)
+                {
+                    if (shape.IsStrictlyIdenticalToShape(other))
+                        return true;
 
-                if (i == 7)
-                    shape.ReflectHorizontal();
+                    if (i == 3)
+                        shape.ReflectVertical();
 
-                shape.Rotate90();
+                    if (i == 7)
+                        shape.ReflectHorizontal();
+
+                    shape.Rotate90();
+                }
+
+                shape = this.Clone();
             }
 
             return false;
@@ -122,6 +130,12 @@ namespace SkillsetGenerator
         public bool IsStrictlyIdenticalToShape(Shape other)
         {
             if (cells.Count() != other.cells.Count())
+                return false;
+
+            if(this.GetSpan().Longest != other.GetSpan().Longest)
+                return false;
+
+            if(this.GetSpan().Shortest != other.GetSpan().Shortest)
                 return false;
 
             foreach (Cell cell in cells)
@@ -181,17 +195,7 @@ namespace SkillsetGenerator
             }
             else
             {
-                // Find the dimensions of the grid
-                int maxX = cells.Max(cell => cell.X);
-                int minX = cells.Min(cell => cell.X);
-                int maxY = cells.Max(cell => cell.Y);
-                int minY = cells.Min(cell => cell.Y);
-
-                int height = maxX - minX;
-                int width = maxY - minY;
-
-                // Get the greatest length of the shape
-                int maxLength = height > width ? height + 1 : width + 1;
+                int maxLength = GetSpan().Longest;
 
                 // Create a grid and place the shape in the center of it
                 Grid grid = new Grid(maxLength*2-1, maxLength*2-1);
@@ -216,8 +220,23 @@ namespace SkillsetGenerator
             return cells;
         }
 
+        public void ShiftOriginToCell(Cell newOrigin)
+        {
+            if (cells == null || cells.Count < 2) // Check if there are enough cells to perform a shift
+                throw new InvalidOperationException("Not enough cells to perform a shift.");
+
+            int deltaX = newOrigin.X;
+            int deltaY = newOrigin.Y;
+
+            foreach (Cell cell in cells)
+            {
+                cell.X -= deltaX; // Subtract new origin X from each cell's X
+                cell.Y -= deltaY; // Subtract new origin Y from each cell's Y
+            }
+        }
+
         // Clone a Shape
-        public object Clone()
+        public Shape Clone()
         {
             List<Cell> newCells = new List<Cell>();
 
@@ -227,6 +246,22 @@ namespace SkillsetGenerator
             }
 
             return new Shape(name, newCells);
+        }
+
+        public (int Longest, int Shortest) GetSpan()
+        {
+            int maxX = cells.Max(cell => cell.X);
+            int minX = cells.Min(cell => cell.X);
+            int maxY = cells.Max(cell => cell.Y);
+            int minY = cells.Min(cell => cell.Y);
+
+            int height = maxX - minX;
+            int width = maxY - minY;
+
+            int longest = height > width ? height : width;
+            int shortest = height < width ? height : width;
+
+            return (longest, shortest);
         }
     }
 }

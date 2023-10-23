@@ -63,7 +63,7 @@ namespace SkillsetGenerator
         // A method for cloning a Cell
         public Cell Clone()
         {
-            return new Cell(this.X, this.Y, this.enabled);
+            return new Cell(this.X, this.Y, this.shape);
         }
     }
 }
