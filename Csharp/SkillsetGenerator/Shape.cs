@@ -101,7 +101,7 @@ namespace SkillsetGenerator
 
             foreach (Cell cell in cells)
             {
-                ShiftOriginToCell(cell);
+                shape.ShiftOriginToCell(cell);
 
                 for (int i = 0; i < 12; i++)
                 {
