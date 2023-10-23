@@ -255,8 +255,8 @@ namespace SkillsetGenerator
             int maxY = cells.Max(cell => cell.Y);
             int minY = cells.Min(cell => cell.Y);
 
-            int height = maxX - minX;
-            int width = maxY - minY;
+            int height = maxX - minX + 1;
+            int width = maxY - minY + 1;
 
             int longest = height > width ? height : width;
             int shortest = height < width ? height : width;
