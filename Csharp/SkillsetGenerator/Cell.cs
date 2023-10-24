@@ -32,7 +32,7 @@ namespace SkillsetGenerator
         public Cell(int x, int y, Shape shape) : this(x,y)
         {
             this.shape = shape;
-            this.symbol = shape.Symbol;
+            this.symbol = shape.ToString().ToUpper()[0];
         }
 
         public void Print(bool graphic = true)

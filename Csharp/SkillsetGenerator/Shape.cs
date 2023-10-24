@@ -10,8 +10,6 @@ namespace SkillsetGenerator
     {
         string name;
         List<Cell> cells;
-        char symbol;
-        public char Symbol { get { return symbol; } }
 
         /// <summary>
         /// Build your own Shape with manual instructions.
@@ -20,7 +18,6 @@ namespace SkillsetGenerator
         public Shape(string name, string instructions)
         {
             this.name = name.ToUpper();
-            this.symbol = this.name[0];
 
             this.cells = new List<Cell>() { new Cell(0,0,this) };
             this.Build(instructions);
@@ -32,7 +29,6 @@ namespace SkillsetGenerator
         public Shape(string name, List<Cell> cells)
         {
             this.name = name.ToUpper();
-            this.symbol = this.name[0];
             this.cells = cells;
         }
 
@@ -124,6 +120,36 @@ namespace SkillsetGenerator
         }
 
         /// <summary>
+        /// Prints the shape visually on a grid, or the coordinates of each Cell in the shape, relative to the shape.
+        /// </summary>
+        public void Print(bool graphic = false)
+        {
+            Console.Write($"{this.name}: ");
+
+            if (!graphic)
+            {
+                foreach (Cell cell in cells)
+                {
+                    cell.Print(graphic);
+                }
+            }
+            else
+            {
+                int maxLength = GetSpan().Longest;
+
+                // Create a grid and place the shape in the center of it
+                Grid grid = new Grid(maxLength*2-1, maxLength*2-1);
+                grid.PlaceShape(this, maxLength-1, maxLength-1);
+
+                // Print the grid
+                Console.Write($"\n");
+                grid.Print();
+            }
+
+            Console.WriteLine();
+        }
+
+        /// <summary>
         /// Determines whether two shapes are strictly identical, meaning they are the same shape and orientation.
         /// </summary>
         /// <param name="other"></param>
@@ -179,47 +205,6 @@ namespace SkillsetGenerator
             return this;
         }
 
-        /// <summary>
-        /// Prints the coordinates of each Cell in the shape, relative to the shape.
-        /// </summary>
-        public void Print(bool graphic = false)
-        {
-            Console.Write($"{this.name}: ");
-
-            if (!graphic)
-            {
-                foreach (Cell cell in cells)
-                {
-                    cell.Print(graphic);
-                }
-            }
-            else
-            {
-                int maxLength = GetSpan().Longest;
-
-                // Create a grid and place the shape in the center of it
-                Grid grid = new Grid(maxLength*2-1, maxLength*2-1);
-                grid.PlaceShape(this, maxLength-1, maxLength-1);
-
-                // Print the grid
-                Console.Write($"\n");
-                grid.Print();
-            }
-
-            Console.WriteLine();
-        }
-
-        /// <returns>Name of the Shape.</returns>
-        public override string ToString()
-        {
-            return name;
-        }
-
-        public List<Cell> GetCells()
-        {
-            return cells;
-        }
-
         public void ShiftOriginToCell(Cell newOrigin)
         {
             if (cells == null || cells.Count < 2) // Check if there are enough cells to perform a shift
@@ -233,19 +218,6 @@ namespace SkillsetGenerator
                 cell.X -= deltaX; // Subtract new origin X from each cell's X
                 cell.Y -= deltaY; // Subtract new origin Y from each cell's Y
             }
-        }
-
-        // Clone a Shape
-        public Shape Clone()
-        {
-            List<Cell> newCells = new List<Cell>();
-
-            foreach (Cell cell in cells)
-            {
-                newCells.Add((Cell)cell.Clone());
-            }
-
-            return new Shape(name, newCells);
         }
 
         public (int Longest, int Shortest) GetSpan()
@@ -262,6 +234,30 @@ namespace SkillsetGenerator
             int shortest = height < width ? height : width;
 
             return (longest, shortest);
+        }
+
+        /// <returns>Name of the Shape.</returns>
+        public override string ToString()
+        {
+            return name;
+        }
+
+        public List<Cell> GetCells()
+        {
+            return cells;
+        }
+
+        // Clone a Shape
+        public Shape Clone()
+        {
+            List<Cell> newCells = new List<Cell>();
+
+            foreach (Cell cell in cells)
+            {
+                newCells.Add(cell.Clone());
+            }
+
+            return new Shape(name, newCells);
         }
     }
 }
