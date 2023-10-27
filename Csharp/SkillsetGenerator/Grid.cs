@@ -71,8 +71,8 @@ namespace SkillsetGenerator
 
                 shapes.Add(shape);
 
-                if (Program.debug)
-                    Console.WriteLine($"Shape {shape.ToString()} placed at ({x},{y}).");
+                //if (Program.debug)
+                //    Console.WriteLine($"Shape {shape.ToString()} placed at ({x},{y}).");
             }
             else if (Program.debug) ;
                 //Console.WriteLine($"Could not place shape {shape.ToString()} at ({x},{y}).");

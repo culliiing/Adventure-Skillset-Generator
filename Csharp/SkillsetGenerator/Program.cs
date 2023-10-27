@@ -9,23 +9,69 @@ namespace SkillsetGenerator
 {
     internal class Program
     {
-        static Random random = new Random();
-        static Grid grid;
         public static bool debug = true;
+        public static Random random = new Random();
+        
+        static Grid grid;
+
+        static Shape A;
+        static Shape B;
+        static Shape C;
+        static Shape D;
+        static Shape E;
+        static Shape F;
 
         static void Main(string[] args)
         {
-            grid = new Grid(10,10);
-            grid.Print();
-            Shape A = new Shape("Abraham", "d");
-            Shape B = new Shape("Beatrice", "ds");
-            Shape C = new Shape("Catherine", "dsa");
-            Shape D = new Shape("Diane", "s");
+            InitializeGrid();
+            InitializeShapes();
+            InitializeSkills();
 
-            B.Print(true);
-            B.Rotate90().ReflectVertical().Rotate90().Print(true);
+            //SimpleShapeComparisonTest();
+            //ShapeComparisonTest();
 
             Console.ReadKey();
+        }
+
+        static void InitializeGrid()
+        {
+            grid = new Grid();
+            //grid.Print();
+        }
+
+        static void InitializeShapes()
+        {
+            A = new Shape("Abraham", "d");
+            B = new Shape("Beatrice", "ds");
+            C = new Shape("Catherine", "dsa");
+            D = new Shape("Diane", "s");
+            E = new Shape("Ernest", "sdwddsdassaaawasaasadsdsdds");
+            //F = new Shape("Emingway", "waasawsdwddsdassaaawasaasadsdsdds");
+        }
+
+        static void InitializeSkills()
+        {
+            Skill lightArmour = new Skill("Light Armour");
+        }
+
+        static void SimpleShapeComparisonTest()
+        {
+            A.Print(true);
+            D.Print(true);
+            Console.WriteLine($"Shapes are identical: {A.IsIdenticalToShape(D)} \n");
+            A.Print(true);
+            D.Print(true);
+        }
+
+        static void ShapeComparisonTest()
+        {
+            F = E.Clone();
+            F.Rotate90().Rotate90().ReflectHorizontal().ShiftOriginToCell(F.GetCells()[random.Next(F.GetCells().Count())]);
+            E.Print(true);
+            F.Print(true);
+            Console.WriteLine($"Shapes are identical: {E.IsIdenticalToShape(F)} \n");
+            E.Print(true);
+            F.Print(true);
         }
     }
 }
