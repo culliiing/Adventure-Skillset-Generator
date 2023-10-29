@@ -25,13 +25,11 @@ class Shape:
 
     def compare(self, other):
         if isinstance(other, Shape):
-            print('Comparing ', self.name, ' to ', other.get_name(), ':')
             count = 0
             for i in range(4):
                 ang = i * math.pi/2
                 queue = sorted([(round(cell[0] * math.cos(ang) - cell[1] * math.sin(ang)),
                                  round(cell[0] * math.sin(ang) + cell[1] * math.cos(ang))) for cell in self.queue])
-                print(self.name, 'with angle', math.degrees(ang), '=', queue)
                 if queue == other.get():
                     count += 1
             return count > 0
@@ -45,6 +43,12 @@ class Shape:
 class Grid:
     def __init__(self, x, y):
         self.matrix = [[" " for j in range(y)] for i in range(x)]
+
+    def copy(self):
+        matrix = deepcopy(self.matrix)
+        new_grid = Grid(len(matrix), len(matrix[0]))
+        new_grid.matrix = matrix
+        return new_grid
 
     def out(self, x=-1, y=-1):
         """
@@ -74,33 +78,6 @@ class Grid:
                 if self.matrix[x][y] == " ":
                     free.append((x, y))
         return sorted(free)
-
-    def add_shapes(self, shapes):
-        num = len(shapes)
-        if num == 0:
-            return True
-
-        shape = shapes[0]
-        name = shape.get_name()
-        free_cells = self.get_free()
-        while len(free_cells) > 0:
-            idx = rand.randint(0, len(free_cells) - 1)
-            x, y = free_cells[idx]
-            addMe = self.add(shape, x, y)
-            if addMe:
-                addRest = self.add_shapes(shapes[1:])
-                if addRest:
-                    return addMe and addRest
-                else:
-                    self._clear(shape.get(), x, y)
-                    del free_cells[idx]
-            else:
-                del free_cells[idx]
-
-            # Leave these comments here, they are used during dev.
-            #print(name, x, y, addMe, free_cells)
-            #self.out(x, y)
-        return False
 
     def add(self, shape, x, y):
         matrix = self.matrix
@@ -136,6 +113,48 @@ class Grid:
     def _in_bounds(self, x, y):
         return x >= 0 and x < len(self.matrix) and y >= 0 and y < len(self.matrix[0])
 
+
 class Solver:
-    def __init__(self) -> None:
-        pass
+    def get_grids(self, shapes):
+        for i in range(len(shapes)-1):
+            for j in range(i+1, len(shapes)):
+                if(shapes[i].compare(shapes[j])):
+                    print("Couldn't add shapes cause",
+                          shapes[i].get_name(), "and", shapes[j].get_name(), "are the same.")
+                    return
+        x = 1
+        y = 1
+        c = 0
+        while True:
+            grids = []
+            self._rec(shapes, Grid(x, y), grids)
+            if len(grids) > 0:
+                return x,y,grids
+
+            if c % 3 % 2 == 0:
+                x += 1
+            else:
+                x -= 1
+                y += 1
+            c += 1
+
+    def _rec(self, shapes, grid, grids):
+        num = len(shapes)
+        if num == 0:
+            grids.append(grid)
+            return
+
+        shape = shapes[0]
+        name = shape.get_name()
+        free_cells = grid.get_free()
+        while len(free_cells) > 0:
+            passable_grid = grid.copy()
+            idx = rand.randint(0, len(free_cells) - 1)
+            x, y = free_cells[idx]
+            addMe = passable_grid.add(shape, x, y)
+            if addMe:
+                self._rec(shapes[1:], passable_grid, grids)
+            del free_cells[idx]
+        # Leave these comments here, they are used during dev.
+        #print(name, x, y, addMe, free_cells)
+        #self.out(x, y)
