@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SkillsetGenerator
 {
-    internal class Shape
+    public class Shape
     {
         string name;
         List<Cell> cells;
@@ -19,7 +19,7 @@ namespace SkillsetGenerator
         {
             this.name = name.ToUpper();
 
-            this.cells = new List<Cell>() { new Cell(0,0,this) };
+            this.cells = new List<Cell>() { new Cell(0, 0, name[0]) };
             this.Build(instructions);
 
             if (Program.debug)
@@ -72,7 +72,7 @@ namespace SkillsetGenerator
                 }
 
                 if(!ContainsCell(x,y))
-                    cells.Add(new Cell(x,y,this));
+                    cells.Add(new Cell(x,y,name[0]));
             }
         }
 

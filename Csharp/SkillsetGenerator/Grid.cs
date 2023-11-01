@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 
 namespace SkillsetGenerator
 {
-    internal class Grid
+    internal class Grid : IGrid
     {
         Random random = new Random();
 
         Cell[,] cells;
+        List<Cell> disabledCells;
         int width;
         int height;
-        List<Shape> shapes;
 
         /// <summary>
         /// A matrix of Cells.
@@ -30,9 +30,9 @@ namespace SkillsetGenerator
                 height = random.Next(1,10);
 
             this.cells = new Cell[height, width];
+            this.disabledCells = new List<Cell>();
             this.width = width;
             this.height = height;
-            this.shapes = new List<Shape>();
 
             for (int i = 0; i < this.height; i++)
             {
@@ -59,59 +59,34 @@ namespace SkillsetGenerator
             }
         }
 
-        /// <param name="force">Replaces existing shapes and overrides disabled grid cells. May cause out-of-bounds errors if true.</param>
-        public void PlaceShape(Shape shape, int x, int y, bool force = false)
+        public void PlaceShape(Shape shape, int x, int y)
         {
-            if (ShapeFits(shape, x, y) || force)
+            foreach (Cell cell in shape.GetCells())
             {
-                foreach (Cell cell in shape.GetCells())
-                {
-                    cells[x + cell.X, y + cell.Y] = cell;
-                }
-
-                shapes.Add(shape);
-
-                //if (Program.debug)
-                //    Console.WriteLine($"Shape {shape.ToString()} placed at ({x},{y}).");
+                cells[x + cell.X, y + cell.Y] = cell;
             }
-            else if (Program.debug) ;
-                //Console.WriteLine($"Could not place shape {shape.ToString()} at ({x},{y}).");
         }
 
         public bool ShapeFits(Shape shape, int x, int y)
         {
-            // Check if shape is identical to any other shape
-            foreach(Shape other in shapes)
-            {
-                if (shape.IsIdenticalToShape(other))
-                {
-                    if (Program.debug) 
-                        Console.WriteLine($"{shape.ToString()} is identical to {other.ToString()}.");
-
-                    return false;
-                }
-            }
-
             // Check if shape is out of bounds or on top of another shape
             foreach (Cell cell in shape.GetCells())
             {
                 int absoluteX = x + cell.X;
                 int absoluteY = y + cell.Y;
 
-                if (IsOutOfBounds(absoluteX,absoluteY))
+                if (IsOutOfBounds(absoluteX, absoluteY))
                 {
                     if (Program.debug)
-                    {
                         Console.WriteLine($"Could not place {shape.ToString()} out of bounds at ({x},{y}).");
-                    }
 
                     return false;
                 }
 
-                if (!cells[absoluteX, absoluteY].IsAvailable())
+                if (CellIsDisabled(absoluteX, absoluteY))
                 {
                     if (Program.debug)
-                        Console.WriteLine($"Could not place {shape.ToString()} on disabled or occupied cell ({x},{y}).");
+                        Console.WriteLine($"Could not place {shape.ToString()} on disabled cell ({x},{y})");
 
                     return false;
                 }
@@ -123,10 +98,25 @@ namespace SkillsetGenerator
         // Check if coordinates is out of bounds of the grid
         public bool IsOutOfBounds(int x, int y)
         {
-            if (x > height || x < 0 || y > width || y < 0)
+            if (x > height - 1 || x < 0 || y > width - 1 || y < 0)
                 return true;
 
             return false;
+        }
+
+        public bool CellIsDisabled(int x, int y)
+        {
+            foreach(Cell cell in disabledCells)
+                if(cell.HasCoordinates(x,y))
+                    return true;
+
+            return false;
+        }
+
+        void DisableCell(Cell cell)
+        {
+            cell = new Cell(cell.X, cell.Y, 'X');
+            disabledCells.Add(cell);
         }
     }
 }
