@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SkillsetGenerator
 {
-    internal class Grid : IGrid
+    internal class Grid
     {
         Random random = new Random();
 

@@ -7,12 +7,6 @@ using System.Threading.Tasks;
 
 namespace SkillsetGenerator
 {
-    public interface IGrid
-    {
-        void PlaceShape(Shape shape, int x, int y);
-        bool ShapeFits(Shape shape, int x, int y);
-    }
-
     internal class Program
     {
         public static bool debug = true;
@@ -37,8 +31,8 @@ namespace SkillsetGenerator
 
             grid = new Grid();
             gridManager = new GridManager(grid);
-            
-            //PlaceShapes();
+
+            PlaceShapes();
             //SimpleShapeComparisonTest();
             //ShapeComparisonTest();
 

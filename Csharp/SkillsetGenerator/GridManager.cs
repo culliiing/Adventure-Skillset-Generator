@@ -8,10 +8,10 @@ namespace SkillsetGenerator
 {
     internal class GridManager
     {
-        IGrid grid;
+        Grid grid;
         Dictionary<Cell, Shape> cellToShapeMap;
 
-        public GridManager(IGrid grid)
+        public GridManager(Grid grid)
         {
             this.grid = grid;
             cellToShapeMap = new Dictionary<Cell, Shape>();
@@ -19,7 +19,7 @@ namespace SkillsetGenerator
 
         public void AddShape(Shape shape, int x, int y)
         {
-            if(!ShapeIsOnGrid(shape) && grid.ShapeFits(shape, x, y) && ShapeOverlapsOccupiedCell(shape, x, y))
+            if(!ShapeIsOnGrid(shape) && grid.ShapeFits(shape, x, y) && !ShapeOverlapsOccupiedCell(shape, x, y))
             {
                 grid.PlaceShape(shape, x, y);
                 AddShapeToMap(shape, x, y);
