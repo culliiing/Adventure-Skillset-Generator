@@ -58,7 +58,7 @@ namespace SkillsetGenerator
 
         static void InitializeSkills()
         {
-            Skill lightArmour = new Skill("Light Armour");
+
         }
 
         static void SimpleShapeComparisonTest()

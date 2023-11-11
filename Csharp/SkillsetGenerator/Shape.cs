@@ -10,20 +10,23 @@ namespace SkillsetGenerator
     {
         string name;
         List<Cell> cells;
+        bool repeatable;
 
         /// <summary>
         /// Build your own Shape with manual instructions.
         /// </summary>
         /// <param name="instructions">Input string of directions where 8=up, 6=right, 2=down, 4=left. WASD also work. Leave empty for random shape.</param>
-        public Shape(string name, string instructions)
+        /// <param name="repeatable">Set to true if the shape can be placed an indefinite amount of times on the grid.</param>
+        public Shape(string name, string instructions, bool repeatable = false)
         {
             this.name = name.ToUpper();
-
+            this.repeatable = repeatable;
             this.cells = new List<Cell>() { new Cell(0, 0, name[0]) };
             this.Build(instructions);
 
             if (Program.debug)
                 Print();
+            this.repeatable = repeatable;
         }
 
         public Shape(string name, List<Cell> cells)
@@ -245,6 +248,11 @@ namespace SkillsetGenerator
         public List<Cell> GetCells()
         {
             return cells;
+        }
+
+        public bool IsRepeatable()
+        {
+            return repeatable;
         }
 
         // Clone a Shape

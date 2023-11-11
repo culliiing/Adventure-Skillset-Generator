@@ -47,7 +47,6 @@
     <Compile Include="Cell.cs" />
     <Compile Include="Relation.cs" />
     <Compile Include="GridManager.cs" />
-    <Compile Include="Skill.cs" />
     <Compile Include="Grid.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
