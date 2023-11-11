@@ -19,7 +19,10 @@ namespace SkillsetGenerator
 
         public void AddShape(Shape shape, int x, int y)
         {
-            if(!ShapeIsOnGrid(shape) && grid.ShapeFits(shape, x, y) && !ShapeOverlapsOccupiedCell(shape, x, y))
+            bool shapeIsPlaceable = grid.ShapeFits(shape, x, y) && !ShapeOverlapsOccupiedCell(shape, x, y);
+            bool shapeIsAllowed = shape.IsRepeatable() ? !IdenticalShapeIsOnGrid(shape) : !ShapeIsOnGrid(shape) && !IdenticalShapeIsOnGrid(shape);
+
+            if(shapeIsAllowed && shapeIsPlaceable)
             {
                 grid.PlaceShape(shape, x, y);
                 AddShapeToMap(shape, x, y);
@@ -41,6 +44,9 @@ namespace SkillsetGenerator
             }
         }
 
+        /// <summary>
+        /// Checks if the shape is already on the grid.
+        /// </summary>
         public bool ShapeIsOnGrid(Shape shape)
         {
             List<Shape> shapesOnGrid = GetShapesOnGrid();
@@ -50,6 +56,13 @@ namespace SkillsetGenerator
                 Console.WriteLine($"{shape.ToString()} is on the grid.");
                 return true;
             }
+
+            return false;
+        }
+
+        public bool IdenticalShapeIsOnGrid(Shape shape)
+        {
+            List<Shape> shapesOnGrid = GetShapesOnGrid();
 
             foreach (Shape other in shapesOnGrid)
             {
