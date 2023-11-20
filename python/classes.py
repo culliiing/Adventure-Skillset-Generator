@@ -10,15 +10,19 @@ class Shape:
         self.name = name
         for operation in string.split():
             last_cell = self.queue[-1]
+            x, y = last_cell
             match operation:
                 case 'r':
-                    self.queue.append((last_cell[0], last_cell[1]+1))
+                    y += 1
                 case 'd':
-                    self.queue.append((last_cell[0]+1, last_cell[1]))
+                    x += 1
                 case 'l':
-                    self.queue.append((last_cell[0], last_cell[1]-1))
+                    y -= 1
                 case 'u':
-                    self.queue.append((last_cell[0]-1, last_cell[1]))
+                    x -= 1
+            if not self.queue.__contains__((x, y)):
+                print(operation, x, y)
+                self.queue.append((x, y))
 
     def get_name(self):
         return self.name
@@ -37,7 +41,7 @@ class Shape:
             return False
 
     def get(self):
-        return sorted(self.queue)
+        return self.queue
 
 
 class Grid:
@@ -129,7 +133,7 @@ class Solver:
             grids = []
             self._rec(shapes, Grid(x, y), grids)
             if len(grids) > 0:
-                return x,y,grids
+                return x, y, grids
 
             if c % 3 % 2 == 0:
                 x += 1
